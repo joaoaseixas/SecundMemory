@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/SecundMemory.Api/SecundMemory.Api.csproj" />
+    <Project Path="src/SecundMemory.Application/SecundMemory.Application.csproj" />
+    <Project Path="src/SecundMemory.Domain/SecundMemory.Domain.csproj" />
+    <Project Path="src/SecundMemory.Infrastructure/SecundMemory.Infrastructure.csproj" />
+  </Folder>
+</Solution>

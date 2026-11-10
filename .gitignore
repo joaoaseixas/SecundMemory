@@ -1,0 +1,36 @@
+## ---- Personal data / secrets: NEVER commit ----
+*.env
+.env.*
+appsettings.Development.json
+appsettings.Local.json
+appsettings.*.local.json
+secrets.json
+**/secrets/
+**/data/
+*.db
+*.sqlite
+*.sqlite3
+src/secund-memory-web/src/environments/environment.local.ts
+
+## ---- .NET ----
+bin/
+obj/
+*.user
+.vs/
+*.suo
+
+## ---- Angular / Node ----
+node_modules/
+dist/
+.angular/
+npm-debug.log*
+*.tsbuildlog
+
+## ---- OS / editor ----
+.DS_Store
+Thumbs.db
+.idea/
+*.swp
+
+## ---- Claude Code harness state (not project source) ----
+.claude/

@@ -1,0 +1,19 @@
+.dashboard {
+  padding: 2rem;
+}
+
+.dashboard__tiles {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.dashboard__updated {
+  margin-top: 1rem;
+  opacity: 0.6;
+  font-size: 0.85rem;
+}
+
+.dashboard__error {
+  color: #e05252;
+}
