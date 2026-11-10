@@ -27,6 +27,10 @@ above never touches a file in this repo at all.
 
 ## Architecture
 
+Full write-up (including the Clean Architecture layer mapping and the test
+projects that mirror it): see [`ARCHITECTURE.md`](./ARCHITECTURE.md).
+
+
 ```
 frontend/secund-memory-web          backend/src
 ┌─────────────────────┐    REST    ┌───────────────────────────┐    SQL    ┌─────────────────────┐
@@ -79,6 +83,11 @@ dotnet run
 cd frontend/secund-memory-web
 npm install
 npm start
+
+# Backend tests (Domain/Application run with zero external dependencies;
+# Infrastructure tests use an in-memory SQLite engine — no cloud DB needed)
+cd backend
+dotnet test
 ```
 
 ## Connecting an AI assistant via MCP

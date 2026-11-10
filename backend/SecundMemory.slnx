@@ -1,8 +1,17 @@
 <Solution>
-  <Folder Name="/src/">
-    <Project Path="src/SecundMemory.Api/SecundMemory.Api.csproj" />
-    <Project Path="src/SecundMemory.Application/SecundMemory.Application.csproj" />
+  <Folder Name="/src/Core/">
     <Project Path="src/SecundMemory.Domain/SecundMemory.Domain.csproj" />
+    <Project Path="src/SecundMemory.Application/SecundMemory.Application.csproj" />
+  </Folder>
+  <Folder Name="/src/Infrastructure/">
     <Project Path="src/SecundMemory.Infrastructure/SecundMemory.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/src/Presentation/">
+    <Project Path="src/SecundMemory.Api/SecundMemory.Api.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/SecundMemory.Domain.UnitTests/SecundMemory.Domain.UnitTests.csproj" />
+    <Project Path="tests/SecundMemory.Application.UnitTests/SecundMemory.Application.UnitTests.csproj" />
+    <Project Path="tests/SecundMemory.Infrastructure.IntegrationTests/SecundMemory.Infrastructure.IntegrationTests.csproj" />
   </Folder>
 </Solution>
