@@ -1,9 +1,0 @@
-<div class="journal-history">
-  <app-journal-calendar />
-
-  @if (pageId(); as id) {
-    <app-block-tree [pageId]="id" />
-  } @else if (notFound()) {
-    <app-empty-state title="No journal entry for this day" />
-  }
-</div>

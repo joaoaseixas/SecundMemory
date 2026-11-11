@@ -1,5 +1,7 @@
 <ul class="journal-calendar">
   @for (day of days; track day.date) {
-    <li><a [routerLink]="['/journal/history', day.date]">{{ day.label }}</a></li>
+    <li [class.journal-calendar__item--active]="day.date === activeDate()">
+      <a [routerLink]="['/journal', day.date]">{{ day.label }}</a>
+    </li>
   }
 </ul>

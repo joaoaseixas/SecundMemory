@@ -1,3 +1,8 @@
 .journal-calendar li {
   padding: var(--spacing-xs) 0;
 }
+
+.journal-calendar__item--active a {
+  color: var(--color-accent);
+  font-weight: 600;
+}

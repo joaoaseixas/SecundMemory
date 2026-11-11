@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { toJournalDateString } from '../../../../shared/utils/date.utils';
 
@@ -18,6 +18,9 @@ const DAYS_BACK = 14;
   styleUrl: './journal-calendar.component.scss',
 })
 export class JournalCalendarComponent {
+  /** The date currently open in the main journal view, for highlighting the matching entry. */
+  readonly activeDate = input('');
+
   protected readonly days: DayEntry[] = Array.from({ length: DAYS_BACK }, (_, i) => {
     const date = new Date();
     date.setDate(date.getDate() - i);

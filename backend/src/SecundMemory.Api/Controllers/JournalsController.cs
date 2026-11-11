@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SecundMemory.Application.Common.Abstractions;
 using SecundMemory.Application.Common.Cqrs;
+using SecundMemory.Application.Features.Journals.Commands.OpenJournalByDate;
 using SecundMemory.Application.Features.Journals.Commands.OpenTodayJournal;
 using SecundMemory.Application.Features.Journals.Dtos;
 using SecundMemory.Application.Features.Journals.Queries.GetJournalByDate;
@@ -16,6 +17,11 @@ public class JournalsController(IDispatcher dispatcher, ICurrentUser currentUser
     [HttpPost("today")]
     public async Task<ActionResult<JournalDto>> OpenToday(CancellationToken cancellationToken) =>
         Ok(await dispatcher.Send(new OpenTodayJournalCommand(WorkspaceId), cancellationToken));
+
+    /// <summary>Get-or-create for any date — the journal UI's Prev/Next/calendar navigation always lands here, never on a 404.</summary>
+    [HttpPost("{date}")]
+    public async Task<ActionResult<JournalDto>> OpenByDate(DateOnly date, CancellationToken cancellationToken) =>
+        Ok(await dispatcher.Send(new OpenJournalByDateCommand(WorkspaceId, date), cancellationToken));
 
     [HttpGet("{date}")]
     public async Task<ActionResult<JournalDto>> GetByDate(DateOnly date, CancellationToken cancellationToken)

@@ -19,6 +19,11 @@ export class JournalsApi {
     return this.api.post<Journal>(ApiEndpoints.journals.today, {});
   }
 
+  /** Get-or-create for any date — never a dead end, unlike the read-only getByDate below. */
+  openByDate(date: string): Observable<Journal> {
+    return this.api.post<Journal>(ApiEndpoints.journals.byDate(date), {});
+  }
+
   getByDate(date: string): Observable<Journal> {
     return this.api.get<Journal>(ApiEndpoints.journals.byDate(date));
   }
