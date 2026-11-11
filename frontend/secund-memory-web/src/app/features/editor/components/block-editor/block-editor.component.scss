@@ -2,20 +2,14 @@
   position: relative;
   flex: 1;
 
-  &__textarea {
+  &__textarea,
+  &__rendered {
     width: 100%;
     border: none;
     background: transparent;
     color: var(--color-text);
     font-family: inherit;
     font-size: var(--font-size-base);
-    resize: none;
-    overflow: hidden;
-    field-sizing: content;
-
-    &:focus {
-      outline: none;
-    }
 
     &--Heading1 {
       font-size: var(--font-size-xl);
@@ -44,6 +38,25 @@
       border-radius: var(--radius-sm);
       padding: var(--spacing-xs);
     }
+  }
+
+  &__textarea {
+    resize: none;
+    overflow: hidden;
+    field-sizing: content;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  &__rendered {
+    min-height: 1.5em;
+    cursor: text;
+    white-space: pre-wrap;
+
+    // .inline-link/.inline-embed are injected via [innerHTML] (MarkdownParserService),
+    // so they never get Angular's scoping attribute — styled globally in styles/_inline-content.scss instead.
   }
 
   &__link-suggestions {

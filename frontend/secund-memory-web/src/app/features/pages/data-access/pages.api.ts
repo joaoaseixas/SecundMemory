@@ -17,6 +17,11 @@ export class PagesApi {
     return this.api.get<Page>(ApiEndpoints.pages.byId(id));
   }
 
+  /** Null when no page with that exact title exists yet — see GetPageByTitleHandler on the backend. */
+  getByTitle(title: string): Observable<Page | null> {
+    return this.api.get<Page | null>(ApiEndpoints.pages.byTitle, { title });
+  }
+
   getBacklinks(id: string): Observable<Backlink[]> {
     return this.api.get<Backlink[]>(ApiEndpoints.pages.backlinks(id));
   }

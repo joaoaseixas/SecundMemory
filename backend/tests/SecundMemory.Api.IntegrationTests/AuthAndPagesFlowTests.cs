@@ -67,4 +67,44 @@ public class AuthAndPagesFlowTests(ApiWebApplicationFactory factory) : IClassFix
 
         Assert.Equal(HttpStatusCode.BadRequest, secondResponse.StatusCode);
     }
+
+    [Fact]
+    public async Task GetByTitle_ExistingPage_ReturnsIt()
+    {
+        var client = factory.CreateClient();
+        await AuthenticateAsync(client);
+
+        var createResponse = await client.PostAsJsonAsync("/api/pages", new CreatePageRequest("Link Target Page"));
+        createResponse.EnsureSuccessStatusCode();
+        var created = await createResponse.Content.ReadFromJsonAsync<PageDto>();
+
+        var response = await client.GetAsync("/api/pages/by-title?title=Link%20Target%20Page");
+        response.EnsureSuccessStatusCode();
+        var found = await response.Content.ReadFromJsonAsync<PageDto>();
+
+        Assert.Equal(created!.Id, found!.Id);
+    }
+
+    [Fact]
+    public async Task GetByTitle_UnknownTitle_ReturnsOkWithEmptyBody()
+    {
+        var client = factory.CreateClient();
+        await AuthenticateAsync(client);
+
+        var response = await client.GetAsync("/api/pages/by-title?title=Nonexistent%20Page");
+        response.EnsureSuccessStatusCode();
+        var body = await response.Content.ReadAsStringAsync();
+
+        Assert.True(string.IsNullOrEmpty(body));
+    }
+
+    private static async Task AuthenticateAsync(HttpClient client)
+    {
+        var registerResponse = await client.PostAsJsonAsync("/api/auth/register",
+            new RegisterCommand($"{Guid.NewGuid()}@test.com", "Integration Test", "password123"));
+        registerResponse.EnsureSuccessStatusCode();
+        var auth = await registerResponse.Content.ReadFromJsonAsync<AuthResultDto>();
+
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", auth!.AccessToken);
+    }
 }

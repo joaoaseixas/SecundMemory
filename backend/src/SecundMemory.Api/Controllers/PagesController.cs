@@ -10,6 +10,7 @@ using SecundMemory.Application.Features.Pages.Commands.RenamePage;
 using SecundMemory.Application.Features.Pages.Dtos;
 using SecundMemory.Application.Features.Pages.Queries.GetBacklinks;
 using SecundMemory.Application.Features.Pages.Queries.GetPageById;
+using SecundMemory.Application.Features.Pages.Queries.GetPageByTitle;
 using SecundMemory.Application.Features.Pages.Queries.ListPages;
 
 namespace SecundMemory.Api.Controllers;
@@ -26,6 +27,15 @@ public class PagesController(IDispatcher dispatcher, ICurrentUser currentUser) :
     [HttpGet("{id:guid}")]
     public async Task<ActionResult<PageDto>> GetById(Guid id, CancellationToken cancellationToken) =>
         Ok(await dispatcher.Send(new GetPageByIdQuery(id), cancellationToken));
+
+    /// <summary>
+    /// Backs the editor's click-on-[[link]] navigation: resolve by exact
+    /// title without the caller needing the id. Returns 200 with an empty
+    /// body (not 404) when no such page exists yet — see GetPageByTitleHandler.
+    /// </summary>
+    [HttpGet("by-title")]
+    public async Task<ActionResult<PageDto?>> GetByTitle([FromQuery] string title, CancellationToken cancellationToken) =>
+        Ok(await dispatcher.Send(new GetPageByTitleQuery(WorkspaceId, title), cancellationToken));
 
     [HttpGet("{id:guid}/backlinks")]
     public async Task<ActionResult<IReadOnlyList<BacklinkDto>>> GetBacklinks(Guid id, CancellationToken cancellationToken) =>

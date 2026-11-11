@@ -8,6 +8,7 @@ export const ApiEndpoints = {
   pages: {
     base: 'pages',
     byId: (id: string) => `pages/${id}`,
+    byTitle: 'pages/by-title',
     backlinks: (id: string) => `pages/${id}/backlinks`,
     title: (id: string) => `pages/${id}/title`,
   },

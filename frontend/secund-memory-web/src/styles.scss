@@ -3,6 +3,7 @@
 @use 'styles/themes/light';
 @use 'styles/themes/dark';
 @use 'styles/reset';
+@use 'styles/inline-content';
 
 // ThemeService stamps data-theme onto <html> as soon as the app bootstraps
 // (reading the OS preference the first time); :root[data-theme='light'] is

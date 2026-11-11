@@ -17,6 +17,14 @@ export class BlocksStore {
   readonly tree = signal<BlockTreeNode[]>([]);
   readonly isLoading = signal(false);
 
+  /**
+   * Structural ops (create/move/delete) reload the whole tree, which tears
+   * down and recreates the affected block-editor component instances —
+   * losing DOM focus. Set to the block that should regain focus once the
+   * reloaded tree has rendered; BlockEditorComponent claims and clears it.
+   */
+  readonly pendingFocusId = signal<string | null>(null);
+
   loadTree(pageId: string): void {
     this.currentPageId = pageId;
     this.isLoading.set(true);
@@ -32,7 +40,10 @@ export class BlocksStore {
 
   createBlock(parentBlockId: string | null, content = '', type: BlockType = 'Text'): void {
     if (!this.currentPageId) return;
-    this.api.create(this.currentPageId, parentBlockId, content, type).subscribe(() => this.reload());
+    this.api.create(this.currentPageId, parentBlockId, content, type).subscribe((created) => {
+      this.pendingFocusId.set(created.id);
+      this.reload();
+    });
   }
 
   updateContent(blockId: string, content: string): void {
@@ -48,11 +59,21 @@ export class BlocksStore {
   }
 
   move(blockId: string, newParentBlockId: string | null, newOrder: number): void {
-    this.api.move(blockId, newParentBlockId, newOrder).subscribe(() => this.reload());
+    this.api.move(blockId, newParentBlockId, newOrder).subscribe(() => {
+      this.pendingFocusId.set(blockId);
+      this.reload();
+    });
   }
 
-  deleteBlock(blockId: string): void {
-    this.api.delete(blockId).subscribe(() => this.reload());
+  deleteBlock(blockId: string, focusAfterId: string | null = null): void {
+    this.api.delete(blockId).subscribe(() => {
+      this.pendingFocusId.set(focusAfterId);
+      this.reload();
+    });
+  }
+
+  clearPendingFocus(): void {
+    this.pendingFocusId.set(null);
   }
 
   private reload(): void {

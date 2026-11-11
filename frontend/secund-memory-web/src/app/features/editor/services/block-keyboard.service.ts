@@ -48,11 +48,29 @@ export class BlockKeyboardService {
     this.store.move(blockId, grandparent?.block.id ?? null, newOrder);
   }
 
-  /** Backspace on an empty, childless block removes it instead of doing nothing. */
+  /** Backspace on an empty, childless block removes it and hands focus to whatever was immediately above it. */
   handleBackspaceOnEmptyBlock(node: BlockTreeNode): void {
-    if (node.block.content.length === 0 && node.children.length === 0) {
-      this.store.deleteBlock(node.block.id);
-    }
+    if (node.block.content.length > 0 || node.children.length > 0) return;
+
+    const flat = this.flatten();
+    const index = flat.findIndex((e) => e.node.block.id === node.block.id);
+    const previousId = index > 0 ? flat[index - 1].node.block.id : null;
+
+    this.store.deleteBlock(node.block.id, previousId);
+  }
+
+  /** Id of the block immediately above `blockId` in reading order, or null if it's the first. */
+  previousBlockId(blockId: string): string | null {
+    const flat = this.flatten();
+    const index = flat.findIndex((e) => e.node.block.id === blockId);
+    return index > 0 ? flat[index - 1].node.block.id : null;
+  }
+
+  /** Id of the block immediately below `blockId` in reading order, or null if it's the last. */
+  nextBlockId(blockId: string): string | null {
+    const flat = this.flatten();
+    const index = flat.findIndex((e) => e.node.block.id === blockId);
+    return index >= 0 && index < flat.length - 1 ? flat[index + 1].node.block.id : null;
   }
 
   private flatten(nodes: BlockTreeNode[] = this.store.tree(), parent: BlockTreeNode | null = null): FlatEntry[] {

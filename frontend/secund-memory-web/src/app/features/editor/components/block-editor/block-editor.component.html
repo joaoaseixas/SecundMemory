@@ -1,21 +1,31 @@
 <div class="block-editor">
+  @if (showRendered()) {
+    <div class="block-editor__rendered" [class]="'block-editor__rendered--' + node().block.type" [innerHTML]="renderedHtml()" (click)="onRenderedClick($event)"></div>
+  }
+
   <textarea
     #textarea
     class="block-editor__textarea"
     [class]="'block-editor__textarea--' + node().block.type"
+    [hidden]="showRendered()"
     [value]="draft()"
+    [attr.data-block-id]="node().block.id"
     rows="1"
     placeholder="Type something…"
     (input)="onInput($event)"
     (keydown)="onKeydown($event)"
+    (focus)="onFocus()"
+    (blur)="onBlur()"
   ></textarea>
 
   @if (showSlashMenu()) {
-    <app-slash-menu [query]="slashQuery()" (typeSelected)="selectBlockType($event)" />
+    <div (mousedown)="$event.preventDefault()">
+      <app-slash-menu [query]="slashQuery()" (typeSelected)="selectBlockType($event)" />
+    </div>
   }
 
   @if (linkSuggestions().length > 0) {
-    <ul class="block-editor__link-suggestions">
+    <ul class="block-editor__link-suggestions" (mousedown)="$event.preventDefault()">
       @for (page of linkSuggestions(); track page.id) {
         <li (click)="selectLinkSuggestion(page.title, textarea)">{{ page.title }}</li>
       }
