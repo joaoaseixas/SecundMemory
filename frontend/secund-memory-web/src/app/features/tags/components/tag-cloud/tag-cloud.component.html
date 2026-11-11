@@ -1,0 +1,5 @@
+<div class="tag-cloud">
+  @for (tag of tags(); track tag.id) {
+    <a class="tag-cloud__tag" [routerLink]="['/tags', tag.id]">#{{ tag.name }}</a>
+  }
+</div>

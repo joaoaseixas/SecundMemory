@@ -1,0 +1,11 @@
+<div class="search-results">
+  <app-search-box (queryChange)="onQueryChange($event)" />
+
+  @if (query() && results().length === 0) {
+    <app-empty-state title="No results" />
+  }
+
+  @for (result of results(); track result.id) {
+    <app-search-result-item [result]="result" [query]="query()" />
+  }
+</div>

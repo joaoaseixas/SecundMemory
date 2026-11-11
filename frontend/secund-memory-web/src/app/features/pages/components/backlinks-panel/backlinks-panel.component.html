@@ -1,0 +1,14 @@
+<h3 class="backlinks__heading">Backlinks</h3>
+
+@if (backlinks().length === 0) {
+  <app-empty-state title="No backlinks yet" description="Pages that link here will show up as you add [[links]] to them." />
+} @else {
+  <ul class="backlinks__list">
+    @for (backlink of backlinks(); track backlink.sourceBlockId) {
+      <li class="backlinks__item">
+        <a [routerLink]="['/pages', backlink.sourcePageId]">{{ backlink.sourcePageTitle }}</a>
+        <p class="backlinks__snippet">{{ backlink.snippet }}</p>
+      </li>
+    }
+  </ul>
+}

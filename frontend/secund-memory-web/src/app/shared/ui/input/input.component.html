@@ -1,0 +1,17 @@
+<div class="field">
+  @if (label()) {
+    <label [for]="id">{{ label() }}</label>
+  }
+  <input
+    [id]="id"
+    [type]="type()"
+    [value]="value()"
+    [placeholder]="placeholder()"
+    class="field__input"
+    [class.field__input--error]="!!error()"
+    (input)="onInput($event)"
+  />
+  @if (error()) {
+    <span class="field__error">{{ error() }}</span>
+  }
+</div>

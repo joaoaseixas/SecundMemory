@@ -1,0 +1,24 @@
+<div class="block-editor">
+  <textarea
+    #textarea
+    class="block-editor__textarea"
+    [class]="'block-editor__textarea--' + node().block.type"
+    [value]="draft()"
+    rows="1"
+    placeholder="Type something…"
+    (input)="onInput($event)"
+    (keydown)="onKeydown($event)"
+  ></textarea>
+
+  @if (showSlashMenu()) {
+    <app-slash-menu [query]="slashQuery()" (typeSelected)="selectBlockType($event)" />
+  }
+
+  @if (linkSuggestions().length > 0) {
+    <ul class="block-editor__link-suggestions">
+      @for (page of linkSuggestions(); track page.id) {
+        <li (click)="selectLinkSuggestion(page.title, textarea)">{{ page.title }}</li>
+      }
+    </ul>
+  }
+</div>

@@ -1,0 +1,6 @@
+@if (isOpen()) {
+  <aside class="right-sidebar">
+    <button class="right-sidebar__collapse" (click)="toggle()">›</button>
+    <ng-content />
+  </aside>
+}

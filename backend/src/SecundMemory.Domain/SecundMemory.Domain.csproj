@@ -1,9 +1,9 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net10.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+  <ItemGroup>
+    <!-- So Infrastructure's AuditableEntityInterceptor can set CreatedAtUtc/
+         LastModifiedAtUtc/etc. without those setters being public API. -->
+    <InternalsVisibleTo Include="SecundMemory.Infrastructure" />
+  </ItemGroup>
 
 </Project>

@@ -1,0 +1,10 @@
+<div class="dropdown" (appClickOutside)="close()">
+  <div class="dropdown__trigger" (click)="toggle()">
+    <ng-content select="[trigger]" />
+  </div>
+  @if (isOpen()) {
+    <div class="dropdown__panel">
+      <ng-content select="[panel]" />
+    </div>
+  }
+</div>

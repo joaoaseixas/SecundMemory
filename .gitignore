@@ -1,4 +1,5 @@
 ## ---- Personal data / secrets: NEVER commit ----
+.env
 *.env
 .env.*
 appsettings.Development.json
@@ -10,7 +11,6 @@ secrets.json
 *.db
 *.sqlite
 *.sqlite3
-src/secund-memory-web/src/environments/environment.local.ts
 
 ## ---- .NET ----
 bin/

@@ -1,0 +1,7 @@
+<section class="profile-settings">
+  <h2>Profile</h2>
+  @if (authStore.session(); as session) {
+    <p>User ID: {{ session.userId }}</p>
+    <p>Workspace ID: {{ session.workspaceId }}</p>
+  }
+</section>

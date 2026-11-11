@@ -1,0 +1,12 @@
+<header class="header">
+  <span class="header__brand">Secund Memory</span>
+
+  <button class="header__search" (click)="palette.open()">Search… (Ctrl+K)</button>
+
+  <div class="header__actions">
+    <app-button variant="ghost" (clicked)="theme.toggle()">
+      {{ theme.theme() === 'light' ? '🌙' : '☀️' }}
+    </app-button>
+    <app-button variant="ghost" (clicked)="logout()">Log out</app-button>
+  </div>
+</header>

@@ -1,0 +1,29 @@
+.header {
+  height: var(--header-height);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: 0 var(--spacing-md);
+  border-bottom: 1px solid var(--color-border);
+
+  &__brand {
+    font-weight: 600;
+  }
+
+  &__search {
+    flex: 1;
+    max-width: 320px;
+    text-align: left;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background: var(--color-surface);
+    color: var(--color-text-muted);
+  }
+
+  &__actions {
+    display: flex;
+    gap: var(--spacing-xs);
+    margin-left: auto;
+  }
+}

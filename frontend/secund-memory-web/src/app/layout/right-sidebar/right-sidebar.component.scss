@@ -1,0 +1,18 @@
+.right-sidebar {
+  width: 280px;
+  height: 100%;
+  border-left: 1px solid var(--color-border);
+  padding: var(--spacing-md);
+  position: relative;
+
+  &__collapse {
+    position: absolute;
+    top: var(--spacing-sm);
+    left: -1rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 50%;
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+}

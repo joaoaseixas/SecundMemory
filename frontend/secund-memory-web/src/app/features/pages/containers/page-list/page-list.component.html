@@ -1,0 +1,16 @@
+<div class="page-list">
+  <form class="page-list__new" (submit)="$event.preventDefault(); createPage()">
+    <app-input placeholder="New page title…" [value]="newTitle()" (valueChange)="newTitle.set($event)" />
+    <app-button type="submit">New page</app-button>
+  </form>
+
+  @if (store.pages().length === 0 && !store.isLoading()) {
+    <app-empty-state title="No pages yet" description="Create your first page above." />
+  } @else {
+    <ul class="page-list__items">
+      @for (page of store.pages(); track page.id) {
+        <li><a [routerLink]="['/pages', page.id]">{{ page.title }}</a></li>
+      }
+    </ul>
+  }
+</div>

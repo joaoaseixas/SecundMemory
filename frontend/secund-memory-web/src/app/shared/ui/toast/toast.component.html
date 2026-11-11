@@ -1,0 +1,7 @@
+<div class="toast-stack">
+  @for (toast of notifications.toasts(); track toast.id) {
+    <div class="toast" [class]="'toast--' + toast.severity" (click)="notifications.dismiss(toast.id)">
+      {{ toast.message }}
+    </div>
+  }
+</div>

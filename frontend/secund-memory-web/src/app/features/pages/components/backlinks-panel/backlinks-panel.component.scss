@@ -1,0 +1,21 @@
+.backlinks {
+  &__heading {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    margin-bottom: var(--spacing-sm);
+  }
+
+  &__item {
+    margin-bottom: var(--spacing-md);
+
+    a {
+      color: var(--color-accent);
+    }
+  }
+
+  &__snippet {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    margin-top: var(--spacing-xs);
+  }
+}

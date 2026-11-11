@@ -1,1 +1,9 @@
-/* You can add global styles to this file, and also import other style files */
+@use 'styles/typography';
+@use 'styles/variables';
+@use 'styles/themes/light';
+@use 'styles/themes/dark';
+@use 'styles/reset';
+
+// ThemeService stamps data-theme onto <html> as soon as the app bootstraps
+// (reading the OS preference the first time); :root[data-theme='light'] is
+// the attribute-less default in the meantime.

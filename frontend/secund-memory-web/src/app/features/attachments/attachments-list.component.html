@@ -1,0 +1,13 @@
+<div class="attachments">
+  <h1>Attachments</h1>
+
+  @if (attachments().length === 0) {
+    <app-empty-state title="No attachments yet" />
+  } @else {
+    <ul>
+      @for (attachment of attachments(); track attachment.id) {
+        <li>{{ attachment.fileName }} ({{ attachment.sizeBytes }} bytes)</li>
+      }
+    </ul>
+  }
+</div>

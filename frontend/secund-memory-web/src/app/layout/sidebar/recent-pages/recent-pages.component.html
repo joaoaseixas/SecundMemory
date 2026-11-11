@@ -1,0 +1,10 @@
+@if (pages().length > 0) {
+  <nav class="recent-pages">
+    <h3 class="recent-pages__heading">Recent</h3>
+    <ul>
+      @for (page of pages(); track page.id) {
+        <li><a [routerLink]="['/pages', page.id]">{{ page.title }}</a></li>
+      }
+    </ul>
+  </nav>
+}

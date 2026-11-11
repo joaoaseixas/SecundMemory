@@ -1,0 +1,5 @@
+<section class="appearance-settings">
+  <h2>Appearance</h2>
+  <p>Current theme: {{ theme.theme() }}</p>
+  <app-button variant="secondary" (clicked)="theme.toggle()">Switch to {{ theme.theme() === 'light' ? 'dark' : 'light' }}</app-button>
+</section>

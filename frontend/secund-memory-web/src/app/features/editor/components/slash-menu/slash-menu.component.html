@@ -1,0 +1,7 @@
+<ul class="slash-menu">
+  @for (option of filtered(); track option.type) {
+    <li class="slash-menu__item" (click)="typeSelected.emit(option.type)">{{ option.label }}</li>
+  } @empty {
+    <li class="slash-menu__item slash-menu__item--empty">No matching block type</li>
+  }
+</ul>

@@ -1,0 +1,9 @@
+@if (store.tree().length === 0 && !store.isLoading()) {
+  <app-empty-state title="This page is empty" description="Start typing to add your first block.">
+    <button (click)="addFirstBlock()">Add a block</button>
+  </app-empty-state>
+} @else {
+  @for (node of store.tree(); track node.block.id) {
+    <app-block-item [node]="node" [parentId]="null" [siblings]="store.tree()" />
+  }
+}

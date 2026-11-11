@@ -1,0 +1,15 @@
+<aside class="sidebar">
+  <nav class="sidebar__nav">
+    <a routerLink="/journal" routerLinkActive="active">Journal</a>
+    <a routerLink="/pages" routerLinkActive="active">Pages</a>
+    <a routerLink="/graph" routerLinkActive="active">Graph</a>
+    <a routerLink="/search" routerLinkActive="active">Search</a>
+    <a routerLink="/tags" routerLinkActive="active">Tags</a>
+  </nav>
+
+  <app-favorites-list />
+  <app-recent-pages />
+
+  <div class="sidebar__spacer"></div>
+  <a class="sidebar__settings" routerLink="/settings" routerLinkActive="active">Settings</a>
+</aside>

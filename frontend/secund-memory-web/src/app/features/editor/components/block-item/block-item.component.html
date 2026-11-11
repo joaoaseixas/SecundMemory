@@ -1,0 +1,26 @@
+<div
+  class="block-item"
+  draggable="true"
+  (dragstart)="onDragStart()"
+  (dragover)="$event.preventDefault()"
+  (drop)="onDropBefore($event)"
+>
+  <div class="block-item__row">
+    <app-block-bullet
+      [hasChildren]="node().children.length > 0"
+      [isCollapsed]="node().block.isCollapsed"
+      (toggled)="toggleCollapse()"
+    />
+    <app-block-editor [node]="node()" />
+  </div>
+
+  @if (!node().block.isCollapsed && node().children.length > 0) {
+    <div class="block-item__children">
+      @for (child of node().children; track child.block.id) {
+        <app-block-item [node]="child" [parentId]="node().block.id" [siblings]="node().children" />
+      }
+    </div>
+  }
+
+  <div class="block-item__drop-after" (dragover)="$event.preventDefault()" (drop)="onDropAfter($event)"></div>
+</div>

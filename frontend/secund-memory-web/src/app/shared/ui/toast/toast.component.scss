@@ -1,0 +1,29 @@
+.toast-stack {
+  position: fixed;
+  bottom: var(--spacing-lg);
+  right: var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  z-index: 2000;
+}
+
+.toast {
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-sm);
+  color: white;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 20%);
+
+  &--info {
+    background: var(--color-accent);
+  }
+
+  &--success {
+    background: #2e9e5b;
+  }
+
+  &--error {
+    background: var(--color-danger);
+  }
+}

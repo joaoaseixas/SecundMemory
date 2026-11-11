@@ -1,0 +1,14 @@
+.page-properties__badge {
+  display: inline-block;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 0 var(--spacing-sm);
+  font-size: var(--font-size-sm);
+  margin-right: var(--spacing-xs);
+  color: var(--color-text-muted);
+}
+
+.page-properties__aliases {
+  margin-top: var(--spacing-xs);
+}

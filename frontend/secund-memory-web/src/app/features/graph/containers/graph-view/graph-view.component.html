@@ -1,0 +1,7 @@
+<div class="graph-view">
+  <h1>Graph</h1>
+  <app-graph-filters />
+  @if (data(); as graphData) {
+    <app-graph-canvas [data]="graphData" />
+  }
+</div>

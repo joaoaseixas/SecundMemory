@@ -1,0 +1,10 @@
+.page-view {
+  display: flex;
+  height: 100%;
+
+  &__main {
+    flex: 1;
+    padding: var(--spacing-lg);
+    overflow-y: auto;
+  }
+}

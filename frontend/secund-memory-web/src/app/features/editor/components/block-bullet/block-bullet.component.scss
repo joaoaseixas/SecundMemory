@@ -1,0 +1,18 @@
+.bullet {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-text-muted);
+  margin-right: var(--spacing-sm);
+  flex-shrink: 0;
+
+  &--parent {
+    cursor: pointer;
+    box-shadow: 0 0 0 3px var(--color-surface);
+  }
+
+  &--collapsed {
+    background: var(--color-accent);
+  }
+}

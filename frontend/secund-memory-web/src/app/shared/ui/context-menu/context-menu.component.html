@@ -1,0 +1,7 @@
+<ul class="context-menu" [style.left.px]="x()" [style.top.px]="y()" (appClickOutside)="closed.emit()">
+  @for (item of items(); track item.action) {
+    <li class="context-menu__item" [class.context-menu__item--danger]="item.danger" (click)="itemSelected.emit(item.action)">
+      {{ item.label }}
+    </li>
+  }
+</ul>

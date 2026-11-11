@@ -1,0 +1,13 @@
+@if (isEditing()) {
+  <input
+    appAutoFocus
+    class="page-title__input"
+    [value]="draft()"
+    (input)="onInput($event)"
+    (blur)="commit()"
+    (keydown.enter)="commit()"
+    (keydown.escape)="cancel()"
+  />
+} @else {
+  <h1 class="page-title" (click)="startEditing()">{{ title() }}</h1>
+}

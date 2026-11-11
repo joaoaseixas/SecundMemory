@@ -1,0 +1,20 @@
+@if (state.isOpen()) {
+  <div class="palette-backdrop" (click)="state.close()">
+    <div class="palette" (click)="$event.stopPropagation()">
+      <input
+        appAutoFocus
+        class="palette__input"
+        placeholder="Type a command…"
+        [value]="query()"
+        (input)="onInput($event)"
+        (keydown.escape)="state.close()"
+        (keydown.enter)="selectFirst()"
+      />
+      <ul class="palette__list">
+        @for (command of filtered(); track command.route) {
+          <li class="palette__item" (click)="select(command)">{{ command.label }}</li>
+        }
+      </ul>
+    </div>
+  </div>
+}

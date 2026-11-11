@@ -1,0 +1,32 @@
+{
+  "app": {
+    "name": "Secund Memory"
+  },
+  "auth": {
+    "login": "Entrar",
+    "register": "Criar conta",
+    "email": "Email",
+    "password": "Senha",
+    "displayName": "Nome de exibição",
+    "logout": "Sair"
+  },
+  "nav": {
+    "pages": "Páginas",
+    "journal": "Diário",
+    "graph": "Grafo",
+    "search": "Buscar",
+    "tags": "Tags",
+    "settings": "Configurações"
+  },
+  "common": {
+    "save": "Salvar",
+    "cancel": "Cancelar",
+    "delete": "Excluir",
+    "loading": "Carregando…",
+    "error": "Algo deu errado."
+  },
+  "editor": {
+    "emptyBlock": "Digite algo…",
+    "newPage": "Nova página"
+  }
+}

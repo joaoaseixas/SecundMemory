@@ -13,5 +13,7 @@
     <Project Path="tests/SecundMemory.Domain.UnitTests/SecundMemory.Domain.UnitTests.csproj" />
     <Project Path="tests/SecundMemory.Application.UnitTests/SecundMemory.Application.UnitTests.csproj" />
     <Project Path="tests/SecundMemory.Infrastructure.IntegrationTests/SecundMemory.Infrastructure.IntegrationTests.csproj" />
+    <Project Path="tests/SecundMemory.Api.IntegrationTests/SecundMemory.Api.IntegrationTests.csproj" />
+    <Project Path="tests/SecundMemory.ArchitectureTests/SecundMemory.ArchitectureTests.csproj" />
   </Folder>
 </Solution>

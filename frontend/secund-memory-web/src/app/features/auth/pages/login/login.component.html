@@ -1,0 +1,12 @@
+<form class="login-form" (submit)="$event.preventDefault(); submit()">
+  <app-input label="Email" type="email" [value]="email()" (valueChange)="email.set($event)" />
+  <app-input label="Password" type="password" [value]="password()" (valueChange)="password.set($event)" />
+
+  @if (error()) {
+    <p class="login-form__error">{{ error() }}</p>
+  }
+
+  <app-button type="submit" [disabled]="isSubmitting()">Log in</app-button>
+
+  <p class="login-form__footer">No account? <a routerLink="/register">Create one</a></p>
+</form>

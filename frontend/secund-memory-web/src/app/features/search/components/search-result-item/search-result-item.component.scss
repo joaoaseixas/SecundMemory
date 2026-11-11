@@ -1,0 +1,21 @@
+.search-result {
+  display: block;
+  padding: var(--spacing-sm) 0;
+  border-bottom: 1px solid var(--color-border);
+
+  &__kind {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+  }
+
+  &__title {
+    display: block;
+    font-weight: 500;
+  }
+
+  &__snippet {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+  }
+}

@@ -1,0 +1,11 @@
+<section class="shortcuts-settings">
+  <h2>Keyboard shortcuts</h2>
+  <dl>
+    @for (shortcut of shortcuts; track shortcut.keys) {
+      <div class="shortcuts-settings__row">
+        <dt>{{ shortcut.keys }}</dt>
+        <dd>{{ shortcut.description }}</dd>
+      </div>
+    }
+  </dl>
+</section>

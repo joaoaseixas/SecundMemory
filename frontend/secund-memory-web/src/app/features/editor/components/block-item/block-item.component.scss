@@ -1,0 +1,17 @@
+.block-item {
+  &__row {
+    display: flex;
+    align-items: flex-start;
+    padding: var(--spacing-xs) 0;
+  }
+
+  &__children {
+    margin-left: 1.25rem;
+    border-left: 1px solid var(--color-border);
+    padding-left: var(--spacing-sm);
+  }
+
+  &__drop-after {
+    height: 4px;
+  }
+}

@@ -1,35 +1,36 @@
 using Microsoft.EntityFrameworkCore;
-using SecundMemory.Application.Common.Interfaces;
-using SecundMemory.Domain.Entities;
+using SecundMemory.Application.Common.Abstractions;
+using SecundMemory.Domain.Attachments;
+using SecundMemory.Domain.Blocks;
+using SecundMemory.Domain.Journals;
+using SecundMemory.Domain.Links;
+using SecundMemory.Domain.Pages;
+using SecundMemory.Domain.Properties;
+using SecundMemory.Domain.Tags;
+using SecundMemory.Domain.Users;
+using SecundMemory.Domain.Workspaces;
 
 namespace SecundMemory.Infrastructure.Persistence;
 
 public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
     : DbContext(options), IApplicationDbContext
 {
-    public DbSet<Note> Notes => Set<Note>();
+    // Exposed directly to Infrastructure.Persistence.Repositories only —
+    // Application reaches Page/Block through IPageRepository/IBlockRepository,
+    // never through these DbSets (see IApplicationDbContext, which omits them).
+    internal DbSet<Page> Pages => Set<Page>();
+    internal DbSet<Block> Blocks => Set<Block>();
+
+    public DbSet<Workspace> Workspaces => Set<Workspace>();
+    public DbSet<User> Users => Set<User>();
     public DbSet<Tag> Tags => Set<Tag>();
-    public DbSet<ProfileFact> ProfileFacts => Set<ProfileFact>();
+    public DbSet<BlockProperty> BlockProperties => Set<BlockProperty>();
+    public DbSet<Journal> Journals => Set<Journal>();
+    public DbSet<Attachment> Attachments => Set<Attachment>();
+    public DbSet<BlockReference> BlockReferences => Set<BlockReference>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Note>(entity =>
-        {
-            entity.Property(n => n.Title).IsRequired().HasMaxLength(256);
-            entity.HasMany(n => n.Tags).WithMany(t => t.Notes).UsingEntity(j => j.ToTable("NoteTags"));
-        });
-
-        modelBuilder.Entity<Tag>(entity =>
-        {
-            entity.Property(t => t.Name).IsRequired().HasMaxLength(64);
-            entity.HasIndex(t => t.Name).IsUnique();
-        });
-
-        modelBuilder.Entity<ProfileFact>(entity =>
-        {
-            entity.Property(f => f.Category).IsRequired().HasMaxLength(64);
-            entity.Property(f => f.Key).IsRequired().HasMaxLength(128);
-            entity.HasIndex(f => new { f.Category, f.Key }).IsUnique();
-        });
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
     }
 }

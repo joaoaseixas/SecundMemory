@@ -1,0 +1,10 @@
+<p class="graph-canvas__note">{{ data().nodes.length }} pages, {{ data().edges.length }} links. Visual layout lands in Fase 2.</p>
+<ul class="graph-canvas__edges">
+  @for (edge of data().edges; track edge.sourcePageId + edge.targetPageId) {
+    <li>
+      <a [routerLink]="['/pages', edge.sourcePageId]">{{ titleOf(edge.sourcePageId) }}</a>
+      →
+      <a [routerLink]="['/pages', edge.targetPageId]">{{ titleOf(edge.targetPageId) }}</a>
+    </li>
+  }
+</ul>

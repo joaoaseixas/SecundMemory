@@ -1,0 +1,6 @@
+<span
+  class="bullet"
+  [class.bullet--parent]="hasChildren()"
+  [class.bullet--collapsed]="isCollapsed()"
+  (click)="hasChildren() && toggled.emit()"
+></span>

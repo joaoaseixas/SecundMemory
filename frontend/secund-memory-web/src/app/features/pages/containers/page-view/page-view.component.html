@@ -1,0 +1,13 @@
+@if (store.currentPage(); as page) {
+  <div class="page-view">
+    <div class="page-view__main">
+      <app-page-title [title]="page.title" (renamed)="rename($event)" />
+      <app-page-properties [page]="page" />
+      <app-block-tree [pageId]="page.id" />
+    </div>
+
+    <app-right-sidebar>
+      <app-backlinks-panel [backlinks]="store.backlinks()" />
+    </app-right-sidebar>
+  </div>
+}

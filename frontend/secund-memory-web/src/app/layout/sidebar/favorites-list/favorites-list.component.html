@@ -1,0 +1,10 @@
+@if (favorites().length > 0) {
+  <nav class="favorites">
+    <h3 class="favorites__heading">Favorites</h3>
+    <ul>
+      @for (page of favorites(); track page.id) {
+        <li><a [routerLink]="['/pages', page.id]">{{ page.title }}</a></li>
+      }
+    </ul>
+  </nav>
+}

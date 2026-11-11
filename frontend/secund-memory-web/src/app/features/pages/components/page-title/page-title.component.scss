@@ -1,0 +1,19 @@
+.page-title {
+  font-size: var(--font-size-xl);
+  cursor: text;
+  padding: var(--spacing-xs) 0;
+
+  &__input {
+    font-size: var(--font-size-xl);
+    border: none;
+    border-bottom: 2px solid var(--color-accent);
+    background: transparent;
+    color: var(--color-text);
+    width: 100%;
+    padding: var(--spacing-xs) 0;
+
+    &:focus {
+      outline: none;
+    }
+  }
+}

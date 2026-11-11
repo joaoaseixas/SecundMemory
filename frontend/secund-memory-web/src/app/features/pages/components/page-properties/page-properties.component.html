@@ -1,0 +1,14 @@
+@if (page().isJournal) {
+  <span class="page-properties__badge">Journal · {{ page().journalDate }}</span>
+}
+@if (page().namespace) {
+  <span class="page-properties__badge">Namespace: {{ page().namespace }}</span>
+}
+@if (page().aliases.length > 0) {
+  <div class="page-properties__aliases">
+    Aliases:
+    @for (alias of page().aliases; track alias) {
+      <span class="page-properties__badge">{{ alias }}</span>
+    }
+  </div>
+}

@@ -1,0 +1,10 @@
+<div class="tag-page">
+  <h1>Tags</h1>
+
+  <form class="tag-page__new" (submit)="$event.preventDefault(); createTag()">
+    <app-input placeholder="New tag name…" [value]="newTagName()" (valueChange)="newTagName.set($event)" />
+    <app-button type="submit">Create tag</app-button>
+  </form>
+
+  <app-tag-cloud [tags]="tags()" />
+</div>
