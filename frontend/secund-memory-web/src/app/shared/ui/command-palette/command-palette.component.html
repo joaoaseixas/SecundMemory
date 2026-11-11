@@ -4,15 +4,25 @@
       <input
         appAutoFocus
         class="palette__input"
-        placeholder="Type a command…"
+        placeholder="Type a command or search…"
         [value]="query()"
         (input)="onInput($event)"
         (keydown.escape)="state.close()"
         (keydown.enter)="selectFirst()"
       />
       <ul class="palette__list">
-        @for (command of filtered(); track command.route) {
-          <li class="palette__item" (click)="select(command)">{{ command.label }}</li>
+        @for (item of items(); track item.type === 'nav' ? item.route : item.result.id) {
+          @if (item.type === 'nav') {
+            <li class="palette__item" (click)="select(item)">{{ item.label }}</li>
+          } @else {
+            <li class="palette__item palette__item--result" (click)="select(item)">
+              <span class="palette__item-kind">{{ item.result.kind }}</span>
+              <span class="palette__item-title" [innerHTML]="item.result.title | highlight: query()"></span>
+              <span class="palette__item-snippet" [innerHTML]="item.result.snippet | highlight: query()"></span>
+            </li>
+          }
+        } @empty {
+          <li class="palette__item palette__item--empty">No matches</li>
         }
       </ul>
     </div>

@@ -6,6 +6,7 @@ import { EmptyStateComponent } from '../../../../shared/ui/empty-state/empty-sta
 import { SearchApi, SearchResult } from '../../data-access/search.api';
 
 const SEARCH_DEBOUNCE_MS = 300;
+const MIN_SEARCH_QUERY_LENGTH = 2;
 
 @Component({
   selector: 'app-search-results',
@@ -30,6 +31,6 @@ export class SearchResultsComponent {
   onQueryChange(query: string): void {
     this.query.set(query);
     this.results.set([]);
-    if (query.trim()) this.query$.next(query);
+    if (query.trim().length >= MIN_SEARCH_QUERY_LENGTH) this.query$.next(query);
   }
 }

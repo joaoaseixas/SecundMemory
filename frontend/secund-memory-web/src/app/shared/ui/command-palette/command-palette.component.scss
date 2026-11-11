@@ -36,9 +36,45 @@
 
   &__item {
     padding: var(--spacing-sm) var(--spacing-md);
+    cursor: pointer;
 
     &:hover {
       background: var(--color-surface);
     }
+
+    &--empty {
+      color: var(--color-text-muted);
+      cursor: default;
+
+      &:hover {
+        background: transparent;
+      }
+    }
+
+    &--result {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: var(--spacing-xs);
+    }
+  }
+
+  &__item-kind {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+  }
+
+  &__item-title {
+    font-weight: 500;
+  }
+
+  &__item-snippet {
+    flex-basis: 100%;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 }
