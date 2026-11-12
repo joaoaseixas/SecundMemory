@@ -1,10 +1,11 @@
-<p class="graph-canvas__note">{{ data().nodes.length }} pages, {{ data().edges.length }} links. Visual layout lands in Fase 2.</p>
-<ul class="graph-canvas__edges">
-  @for (edge of data().edges; track edge.sourcePageId + edge.targetPageId) {
-    <li>
-      <a [routerLink]="['/pages', edge.sourcePageId]">{{ titleOf(edge.sourcePageId) }}</a>
-      →
-      <a [routerLink]="['/pages', edge.targetPageId]">{{ titleOf(edge.targetPageId) }}</a>
-    </li>
-  }
-</ul>
+<p class="graph-canvas__note">{{ data().nodes.length }} pages, {{ data().edges.length }} links. Drag to move, click a node to open it.</p>
+<div class="graph-canvas__stage">
+  <canvas
+    #canvas
+    class="graph-canvas__canvas"
+    (pointermove)="onMove($event)"
+    (pointerdown)="onDown($event)"
+    (pointerup)="onUp()"
+    (pointerleave)="onLeave()"
+  ></canvas>
+</div>

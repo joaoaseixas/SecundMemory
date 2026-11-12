@@ -3,6 +3,12 @@
   margin-bottom: var(--spacing-md);
 }
 
-.graph-canvas__edges li {
-  padding: var(--spacing-xs) 0;
+.graph-canvas__stage {
+  width: 100%;
+}
+
+.graph-canvas__canvas {
+  display: block;
+  width: 100%;
+  touch-action: none;
 }
