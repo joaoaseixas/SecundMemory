@@ -21,6 +21,16 @@ public class FakeBlockRepository : IBlockRepository
         return Task.FromResult<IReadOnlyList<Block>>(_blocks.Values.Where(b => idSet.Contains(b.Id)).ToList());
     }
 
+    /// <summary>
+    /// Ignores workspaceId: unlike the real BlockRepository, this fake has no
+    /// Page/Workspace data to join against, and tests only ever add blocks
+    /// relevant to the scenario under test, so tag-id filtering alone is
+    /// enough here. Workspace scoping is covered by the real implementation
+    /// via Infrastructure.IntegrationTests instead.
+    /// </summary>
+    public Task<IReadOnlyList<Block>> GetByTagIdAsync(Guid workspaceId, Guid tagId, CancellationToken cancellationToken = default) =>
+        Task.FromResult<IReadOnlyList<Block>>(_blocks.Values.Where(b => b.TagIds.Contains(tagId)).ToList());
+
     public void Add(Block block) => _blocks[block.Id] = block;
 
     public void Remove(Block block) => _blocks.Remove(block.Id);

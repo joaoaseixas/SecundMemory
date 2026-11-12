@@ -1,11 +1,13 @@
+using SecundMemory.Application.Common.Abstractions;
 using SecundMemory.Application.Common.Cqrs;
 using SecundMemory.Application.Common.Exceptions;
+using SecundMemory.Application.Features.Blocks.Common;
 using SecundMemory.Application.Features.Blocks.Dtos;
 using SecundMemory.Domain.Blocks;
 
 namespace SecundMemory.Application.Features.Blocks.Commands.ChangeBlockType;
 
-public class ChangeBlockTypeHandler(IBlockRepository blockRepository) : ICommandHandler<ChangeBlockTypeCommand, BlockDto>
+public class ChangeBlockTypeHandler(IBlockRepository blockRepository, IApplicationDbContext db) : ICommandHandler<ChangeBlockTypeCommand, BlockDto>
 {
     public async Task<BlockDto> Handle(ChangeBlockTypeCommand command, CancellationToken cancellationToken)
     {
@@ -14,6 +16,6 @@ public class ChangeBlockTypeHandler(IBlockRepository blockRepository) : ICommand
 
         block.ChangeType(command.Type);
 
-        return block.ToDto();
+        return block.ToDto(await BlockPropertyLoader.LoadAsync(db, block.Id, cancellationToken));
     }
 }

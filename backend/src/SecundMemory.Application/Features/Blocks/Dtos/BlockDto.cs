@@ -1,6 +1,9 @@
 using SecundMemory.Domain.Blocks;
+using SecundMemory.Domain.Properties;
 
 namespace SecundMemory.Application.Features.Blocks.Dtos;
+
+public record BlockPropertyDto(string Key, PropertyType Type, string Value);
 
 public record BlockDto(
     Guid Id,
@@ -11,6 +14,7 @@ public record BlockDto(
     double Order,
     bool IsCollapsed,
     IReadOnlyList<Guid> TagIds,
+    IReadOnlyList<BlockPropertyDto> Properties,
     DateTime CreatedAtUtc,
     DateTime? LastModifiedAtUtc);
 
@@ -18,7 +22,7 @@ public record BlockTreeNodeDto(BlockDto Block, IReadOnlyList<BlockTreeNodeDto> C
 
 public static class BlockMappings
 {
-    public static BlockDto ToDto(this Block block) => new(
+    public static BlockDto ToDto(this Block block, IReadOnlyList<BlockPropertyDto>? properties = null) => new(
         block.Id,
         block.PageId,
         block.ParentBlockId,
@@ -27,6 +31,7 @@ public static class BlockMappings
         block.Order,
         block.IsCollapsed,
         block.TagIds.ToList(),
+        properties ?? [],
         block.CreatedAtUtc,
         block.LastModifiedAtUtc);
 }

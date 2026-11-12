@@ -22,6 +22,21 @@ public class BlockRepository(ApplicationDbContext db) : IBlockRepository
         return await db.Blocks.Where(b => idList.Contains(b.Id)).ToListAsync(cancellationToken);
     }
 
+    /// <summary>
+    /// TagIds is a jsonb list on Block, not a relational FK, so EF Core can't
+    /// translate .Contains(tagId) against it into SQL (the same class of
+    /// limitation as the Email/.Value issue elsewhere) — filter by workspace
+    /// in SQL via the Pages join, then filter by tag in memory.
+    /// </summary>
+    public async Task<IReadOnlyList<Block>> GetByTagIdAsync(Guid workspaceId, Guid tagId, CancellationToken cancellationToken = default)
+    {
+        var pageIds = await db.Pages.Where(p => p.WorkspaceId == workspaceId).Select(p => p.Id).ToListAsync(cancellationToken);
+        if (pageIds.Count == 0) return [];
+
+        var blocks = await db.Blocks.Where(b => pageIds.Contains(b.PageId)).ToListAsync(cancellationToken);
+        return blocks.Where(b => b.TagIds.Contains(tagId)).ToList();
+    }
+
     public void Add(Block block) => db.Blocks.Add(block);
 
     public void Remove(Block block) => db.Blocks.Remove(block);

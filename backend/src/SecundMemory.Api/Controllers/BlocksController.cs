@@ -8,6 +8,7 @@ using SecundMemory.Application.Features.Blocks.Commands.DeleteBlock;
 using SecundMemory.Application.Features.Blocks.Commands.MoveBlock;
 using SecundMemory.Application.Features.Blocks.Commands.ToggleCollapse;
 using SecundMemory.Application.Features.Blocks.Commands.UpdateBlockContent;
+using SecundMemory.Application.Features.Blocks.Commands.UpdateBlockProperty;
 using SecundMemory.Application.Features.Blocks.Dtos;
 using SecundMemory.Application.Features.Blocks.Queries.GetBlockTree;
 
@@ -44,6 +45,10 @@ public class BlocksController(IDispatcher dispatcher) : ControllerBase
     [HttpPut("blocks/{id:guid}/type")]
     public async Task<ActionResult<BlockDto>> ChangeType(Guid id, ChangeBlockTypeRequest request, CancellationToken cancellationToken) =>
         Ok(await dispatcher.Send(new ChangeBlockTypeCommand(id, request.Type), cancellationToken));
+
+    [HttpPut("blocks/{id:guid}/properties/{key}")]
+    public async Task<ActionResult<BlockPropertyDto>> UpdateProperty(Guid id, string key, UpdateBlockPropertyRequest request, CancellationToken cancellationToken) =>
+        Ok(await dispatcher.Send(new UpdateBlockPropertyCommand(id, key, request.Value), cancellationToken));
 
     [HttpDelete("blocks/{id:guid}")]
     public async Task<IActionResult> Delete(Guid id, CancellationToken cancellationToken)

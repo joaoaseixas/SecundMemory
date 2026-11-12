@@ -1,11 +1,13 @@
+using SecundMemory.Application.Common.Abstractions;
 using SecundMemory.Application.Common.Cqrs;
 using SecundMemory.Application.Common.Exceptions;
 using SecundMemory.Domain.Blocks;
+using SecundMemory.Application.Features.Blocks.Common;
 using SecundMemory.Application.Features.Blocks.Dtos;
 
 namespace SecundMemory.Application.Features.Blocks.Commands.MoveBlock;
 
-public class MoveBlockHandler(IBlockRepository blockRepository) : ICommandHandler<MoveBlockCommand, BlockDto>
+public class MoveBlockHandler(IBlockRepository blockRepository, IApplicationDbContext db) : ICommandHandler<MoveBlockCommand, BlockDto>
 {
     public async Task<BlockDto> Handle(MoveBlockCommand command, CancellationToken cancellationToken)
     {
@@ -17,6 +19,6 @@ public class MoveBlockHandler(IBlockRepository blockRepository) : ICommandHandle
 
         block.Move(command.NewParentBlockId, command.NewOrder);
 
-        return block.ToDto();
+        return block.ToDto(await BlockPropertyLoader.LoadAsync(db, block.Id, cancellationToken));
     }
 }

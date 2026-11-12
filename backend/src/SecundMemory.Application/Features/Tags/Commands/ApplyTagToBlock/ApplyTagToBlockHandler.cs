@@ -27,16 +27,16 @@ public class ApplyTagToBlockHandler(IApplicationDbContext db, IBlockRepository b
 
         block.AddTag(tag.Id);
 
-        var existingKeys = await db.BlockProperties
-            .Where(p => p.BlockId == block.Id)
-            .Select(p => p.Key)
-            .ToListAsync(cancellationToken);
+        var existing = await db.BlockProperties.Where(p => p.BlockId == block.Id).ToListAsync(cancellationToken);
+        var existingKeys = existing.Select(p => p.Key).ToHashSet(StringComparer.OrdinalIgnoreCase);
 
         foreach (var template in tag.PropertyTemplates.Where(t => !existingKeys.Contains(t.Key)))
         {
-            db.BlockProperties.Add(BlockProperty.Create(block.Id, template.Key, template.Type, template.DefaultValue ?? string.Empty));
+            var created = BlockProperty.Create(block.Id, template.Key, template.Type, template.DefaultValue ?? string.Empty);
+            db.BlockProperties.Add(created);
+            existing.Add(created);
         }
 
-        return block.ToDto();
+        return block.ToDto(existing.Select(p => new BlockPropertyDto(p.Key, p.Type, p.Value)).ToList());
     }
 }

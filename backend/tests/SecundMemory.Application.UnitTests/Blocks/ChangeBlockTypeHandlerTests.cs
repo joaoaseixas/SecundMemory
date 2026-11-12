@@ -10,10 +10,11 @@ public class ChangeBlockTypeHandlerTests
     [Fact]
     public async Task Handle_ChangesType()
     {
+        using var db = TestApplicationDbContext.Create();
         var repository = new FakeBlockRepository();
         var block = await new CreateBlockHandler(repository).Handle(new CreateBlockCommand(Guid.NewGuid(), null, "text"), CancellationToken.None);
 
-        var result = await new ChangeBlockTypeHandler(repository).Handle(new ChangeBlockTypeCommand(block.Id, BlockType.Heading1), CancellationToken.None);
+        var result = await new ChangeBlockTypeHandler(repository, db).Handle(new ChangeBlockTypeCommand(block.Id, BlockType.Heading1), CancellationToken.None);
 
         Assert.Equal(BlockType.Heading1, result.Type);
     }
