@@ -4,6 +4,7 @@ import {
   ElementRef,
   NgZone,
   OnDestroy,
+  effect,
   inject,
   input,
   viewChild,
@@ -38,10 +39,38 @@ export class GraphCanvasComponent implements AfterViewInit, OnDestroy {
   private width = 800;
   private height = 560;
 
+  private viewReady = false;
+
+  constructor() {
+    // Rebuild the simulation when filters change the data, keeping the
+    // positions of nodes that stay so the layout doesn't jump.
+    effect(() => {
+      const data = this.data();
+      if (this.viewReady) this.rebuild(data);
+    });
+  }
+
+  private rebuild(data: GraphData): void {
+    const previous = new Map(this.sim?.nodes.map((n) => [n.id, n]));
+    this.sim = new ForceSimulation(data, this.width, this.height);
+    for (const n of this.sim.nodes) {
+      const old = previous.get(n.id);
+      if (old) {
+        n.x = old.x;
+        n.y = old.y;
+      }
+    }
+    this.sim.alpha = previous.size ? 0.6 : 1;
+    this.hovered = null;
+    this.dragging = null;
+    this.kick();
+  }
+
   ngAfterViewInit(): void {
     const canvas = this.canvasRef().nativeElement;
     this.measure(canvas);
     this.sim = new ForceSimulation(this.data(), this.width, this.height);
+    this.viewReady = true;
 
     this.resizeObserver = new ResizeObserver(() => {
       this.measure(canvas);
