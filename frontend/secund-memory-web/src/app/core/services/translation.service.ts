@@ -21,8 +21,13 @@ export class TranslationService {
   readonly locale = signal<SupportedLocale>(this.storage.get<SupportedLocale>(STORAGE_KEY) ?? DEFAULT_LOCALE);
 
   async init(): Promise<void> {
-    const data = await firstValueFrom(this.http.get<Record<string, unknown>>(`assets/i18n/${this.locale()}.json`));
-    this.dictionary.set(data);
+    try {
+      const data = await firstValueFrom(this.http.get<Record<string, unknown>>(`assets/i18n/${this.locale()}.json`));
+      this.dictionary.set(data);
+    } catch (err) {
+      // Never block app bootstrap on missing translations; keys render as-is.
+      console.error('Failed to load translations', err);
+    }
   }
 
   async setLocale(locale: SupportedLocale): Promise<void> {
