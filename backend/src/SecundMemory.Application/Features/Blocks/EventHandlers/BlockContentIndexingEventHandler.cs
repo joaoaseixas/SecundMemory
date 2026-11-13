@@ -5,6 +5,7 @@ using SecundMemory.Domain.Blocks;
 using SecundMemory.Domain.Blocks.Events;
 using SecundMemory.Domain.Links;
 using SecundMemory.Domain.Pages;
+using SecundMemory.Domain.Tags;
 
 namespace SecundMemory.Application.Features.Blocks.EventHandlers;
 
@@ -16,33 +17,27 @@ namespace SecundMemory.Application.Features.Blocks.EventHandlers;
 /// Infrastructure.Search.SearchIndexUpdater is a periodic consistency sweep
 /// on top of this, not a replacement for it.
 /// </summary>
-public class BlockContentIndexingEventHandler(IApplicationDbContext db, IPageRepository pageRepository) :
+public class BlockContentIndexingEventHandler(IApplicationDbContext db, IPageRepository pageRepository, IBlockRepository blockRepository) :
     IDomainEventHandler<BlockCreatedEvent>,
     IDomainEventHandler<BlockContentUpdatedEvent>
 {
     public Task Handle(BlockCreatedEvent domainEvent, CancellationToken cancellationToken) =>
-        ReindexAsync(domainEvent.BlockId, domainEvent.PageId, cancellationToken);
+        ReindexAsync(domainEvent.BlockId, domainEvent.PageId, domainEvent.Content, cancellationToken);
 
     public Task Handle(BlockContentUpdatedEvent domainEvent, CancellationToken cancellationToken) =>
         ReindexAsync(domainEvent.BlockId, domainEvent.PageId, domainEvent.NewContent, cancellationToken);
-
-    private async Task ReindexAsync(Guid blockId, Guid pageId, CancellationToken cancellationToken)
-    {
-        // BlockCreatedEvent doesn't carry content (a block is usually empty at
-        // creation), but handle it uniformly in case a future caller creates
-        // one with initial content already set.
-        await ReindexAsync(blockId, pageId, null, cancellationToken);
-    }
 
     private async Task ReindexAsync(Guid blockId, Guid pageId, string? content, CancellationToken cancellationToken)
     {
         var existingRefs = await db.BlockReferences.Where(r => r.SourceBlockId == blockId).ToListAsync(cancellationToken);
         db.BlockReferences.RemoveRange(existingRefs);
 
-        if (string.IsNullOrEmpty(content)) return;
-
         var sourcePage = await pageRepository.GetByIdAsync(pageId, cancellationToken);
         if (sourcePage is null) return;
+
+        await SyncTagsAsync(blockId, sourcePage.WorkspaceId, content ?? string.Empty, cancellationToken);
+
+        if (string.IsNullOrEmpty(content)) return;
 
         foreach (var title in LinkParser.ExtractPageLinks(content))
         {
@@ -60,5 +55,41 @@ public class BlockContentIndexingEventHandler(IApplicationDbContext db, IPageRep
         {
             db.BlockReferences.Add(BlockReference.ToBlock(blockId, targetBlockId));
         }
+    }
+
+    /// <summary>
+    /// Makes the block's tags mirror the #tags in its text, creating Tag rows
+    /// on first use — so the Tags screen fills up just by writing.
+    /// </summary>
+    private async Task SyncTagsAsync(Guid blockId, Guid workspaceId, string content, CancellationToken cancellationToken)
+    {
+        var block = await blockRepository.GetByIdAsync(blockId, cancellationToken);
+        if (block is null) return;
+
+        var names = LinkParser.ExtractTags(content);
+        var wanted = new HashSet<Guid>();
+
+        if (names.Count > 0)
+        {
+            var lowered = names.Select(n => n.ToLower()).ToList();
+            var tags = await db.Tags
+                .Where(t => t.WorkspaceId == workspaceId && lowered.Contains(t.Name.ToLower()))
+                .ToListAsync(cancellationToken);
+
+            foreach (var name in names)
+            {
+                var tag = tags.FirstOrDefault(t => t.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
+                    ?? db.Tags.Local.FirstOrDefault(t => t.WorkspaceId == workspaceId && t.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+                if (tag is null)
+                {
+                    tag = Tag.Create(workspaceId, name);
+                    db.Tags.Add(tag);
+                }
+                wanted.Add(tag.Id);
+            }
+        }
+
+        foreach (var stale in block.TagIds.Where(id => !wanted.Contains(id)).ToList()) block.RemoveTag(stale);
+        foreach (var id in wanted) block.AddTag(id);
     }
 }

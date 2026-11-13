@@ -71,6 +71,13 @@ frontend/secund-memory-web          backend/src
 
 ## Running locally
 
+**Quick start (single process):** after setting the secrets below once, run
+`./run.ps1` from the repo root. It builds the Angular app and starts the API,
+which also serves the UI at http://localhost:5005 (`-SkipBuild` to reuse the
+last build). Required user-secrets: `ConnectionStrings:SecondBrain` and
+`Jwt:Secret` (32+ chars). Write `#tags` and `[[links]]` in any block — they're
+indexed automatically.
+
 ```
 # Backend (http://localhost:5005)
 cd backend/src/SecundMemory.Api

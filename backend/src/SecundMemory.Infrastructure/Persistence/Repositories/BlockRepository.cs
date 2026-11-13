@@ -5,8 +5,11 @@ namespace SecundMemory.Infrastructure.Persistence.Repositories;
 
 public class BlockRepository(ApplicationDbContext db) : IBlockRepository
 {
-    public Task<Block?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default) =>
-        db.Blocks.FirstOrDefaultAsync(b => b.Id == id, cancellationToken);
+    // Check the change tracker first: domain-event handlers run before the
+    // save, so a block created in this unit of work isn't in the DB yet.
+    public async Task<Block?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default) =>
+        db.Blocks.Local.FirstOrDefault(b => b.Id == id)
+        ?? await db.Blocks.FirstOrDefaultAsync(b => b.Id == id, cancellationToken);
 
     public async Task<IReadOnlyList<Block>> GetByPageIdAsync(Guid pageId, CancellationToken cancellationToken = default) =>
         await db.Blocks.Where(b => b.PageId == pageId).ToListAsync(cancellationToken);

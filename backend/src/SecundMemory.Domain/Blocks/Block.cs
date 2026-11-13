@@ -37,7 +37,7 @@ public class Block : AggregateRoot, ISoftDeletable
             Order = order,
         };
 
-        block.RaiseDomainEvent(new BlockCreatedEvent(block.Id, pageId));
+        block.RaiseDomainEvent(new BlockCreatedEvent(block.Id, pageId, content.Value));
         return block;
     }
 

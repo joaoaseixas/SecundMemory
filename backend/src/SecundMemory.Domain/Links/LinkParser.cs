@@ -35,6 +35,21 @@ public static partial class LinkParser
             .ToList();
     }
 
+    /// <summary>Extracts #tag names (case-insensitive distinct, original casing of first use kept).</summary>
+    public static IReadOnlyList<string> ExtractTags(string content)
+    {
+        if (string.IsNullOrEmpty(content)) return [];
+
+        return TagRegex()
+            .Matches(content)
+            .Select(m => m.Groups[1].Value)
+            .DistinctBy(t => t, StringComparer.OrdinalIgnoreCase)
+            .ToList();
+    }
+
+    [GeneratedRegex(@"(?<![\p{L}\p{N}_&/#])#([\p{L}\p{N}_][\p{L}\p{N}_/-]*)")]
+    private static partial Regex TagRegex();
+
     [GeneratedRegex(@"\[\[([^\[\]]+)\]\]")]
     private static partial Regex PageLinkRegex();
 
