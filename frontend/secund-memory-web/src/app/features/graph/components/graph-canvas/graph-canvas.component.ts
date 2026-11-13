@@ -174,7 +174,7 @@ export class GraphCanvasComponent implements AfterViewInit, OnDestroy {
     const css = getComputedStyle(canvas);
     const text = css.getPropertyValue('--color-text').trim() || '#222';
     const muted = css.getPropertyValue('--color-text-muted').trim() || '#888';
-    const accent = css.getPropertyValue('--color-primary').trim() || '#4f6df5';
+    const accent = css.getPropertyValue('--color-accent').trim() || '#4338f0';
 
     ctx.clearRect(0, 0, this.width, this.height);
 

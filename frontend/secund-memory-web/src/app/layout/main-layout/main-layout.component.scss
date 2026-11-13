@@ -9,8 +9,22 @@
     min-width: 0;
   }
 
+  // The signature: a dot field, like graph paper, behind everything you write.
   &__body {
     flex: 1;
     overflow-y: auto;
+    background-image: radial-gradient(var(--color-dot) 1.2px, transparent 1.2px);
+    background-size: var(--dot-size) var(--dot-size);
+    background-position: calc(var(--dot-size) / 2) calc(var(--dot-size) / 2);
+  }
+
+  @media (max-width: 760px) {
+    flex-direction: column;
+    height: auto;
+    min-height: 100vh;
+
+    &__body {
+      overflow-y: visible;
+    }
   }
 }

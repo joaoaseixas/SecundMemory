@@ -13,14 +13,23 @@ body {
 
 body {
   font-family: var(--font-family);
+  font-size: var(--font-size-base);
+  line-height: 1.55;
   background: var(--color-bg);
   color: var(--color-text);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 button {
   font: inherit;
   color: inherit;
   cursor: pointer;
+}
+
+input,
+textarea {
+  font: inherit;
 }
 
 a {
@@ -31,4 +40,30 @@ a {
 ul,
 ol {
   list-style: none;
+}
+
+::selection {
+  background: var(--color-accent-soft);
+  color: var(--color-text);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+// Slim scrollbars so the dot field stays the visual texture, not chrome.
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border-strong) transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }

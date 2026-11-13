@@ -1,16 +1,26 @@
 // Targets markup injected via [innerHTML] (MarkdownParserService.renderInline) — such
 // content bypasses Angular's view-encapsulation attribute, so it can only be styled globally.
 
+// A link to another page reads as a small node: tinted pill, accent text.
 .inline-link {
   color: var(--color-accent);
+  background: var(--color-accent-soft);
+  border-radius: var(--radius-pill);
+  padding: 0.05em 0.55em;
   cursor: pointer;
-  text-decoration: underline;
+  text-decoration: none;
+  transition: box-shadow var(--duration-fast) var(--ease-out);
+
+  &:hover {
+    box-shadow: 0 0 0 2px var(--color-accent);
+  }
 }
 
 .inline-embed {
   color: var(--color-text-muted);
-  font-size: var(--font-size-sm);
-  border: 1px dashed var(--color-border);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-xs);
+  border: 1px dashed var(--color-border-strong);
   border-radius: var(--radius-sm);
   padding: 0 var(--spacing-xs);
 }

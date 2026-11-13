@@ -1,4 +1,14 @@
 <aside class="sidebar">
+  <a class="sidebar__brand" routerLink="/journal" aria-label="Secund Memory, go to journal">
+    <svg class="sidebar__mark" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M6 17 12 6l6 11" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" />
+      <circle cx="12" cy="6" r="2.6" fill="currentColor" />
+      <circle cx="6" cy="17" r="2.6" fill="currentColor" />
+      <circle cx="18" cy="17" r="2.6" fill="var(--color-signal)" />
+    </svg>
+    <span class="sidebar__name">Secund Memory</span>
+  </a>
+
   <nav class="sidebar__nav">
     <a routerLink="/journal" routerLinkActive="active">Journal</a>
     <a routerLink="/pages" routerLinkActive="active">Pages</a>
@@ -7,8 +17,10 @@
     <a routerLink="/tags" routerLinkActive="active">Tags</a>
   </nav>
 
-  <app-favorites-list />
-  <app-recent-pages />
+  <div class="sidebar__lists">
+    <app-favorites-list />
+    <app-recent-pages />
+  </div>
 
   <div class="sidebar__spacer"></div>
   <a class="sidebar__settings" routerLink="/settings" routerLinkActive="active">Settings</a>

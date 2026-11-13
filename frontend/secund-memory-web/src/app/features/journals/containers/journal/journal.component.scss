@@ -1,7 +1,9 @@
 .journal {
   display: flex;
-  gap: var(--spacing-lg);
-  padding: var(--spacing-lg);
+  gap: var(--spacing-xl);
+  padding: var(--spacing-xl) var(--spacing-lg);
+  max-width: calc(var(--content-width) + 260px);
+  margin: 0 auto;
 
   &__sidebar {
     flex: 0 0 auto;
@@ -10,26 +12,34 @@
   &__main {
     flex: 1;
     min-width: 0;
+    max-width: var(--content-width);
   }
 
   &__header {
     display: flex;
     align-items: center;
     gap: var(--spacing-sm);
-    margin-bottom: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
 
     h1 {
       flex: 1;
-      font-size: var(--font-size-lg);
+      font-size: var(--font-size-xl);
+      font-weight: 700;
       margin: 0;
     }
 
     button {
       background: var(--color-surface);
-      border: 1px solid var(--color-border);
-      border-radius: var(--radius-sm);
-      padding: var(--spacing-xs) var(--spacing-sm);
-      cursor: pointer;
+      border: 1px solid var(--color-border-strong);
+      border-radius: var(--radius-pill);
+      padding: var(--spacing-xs) var(--spacing-md);
+      color: var(--color-text-muted);
+      transition: all var(--duration-fast) var(--ease-out);
+
+      &:hover:not(:disabled) {
+        border-color: var(--color-accent);
+        color: var(--color-accent);
+      }
 
       &:disabled {
         opacity: 0.5;
@@ -40,5 +50,12 @@
 
   &__today-button {
     color: var(--color-accent);
+    border-color: var(--color-signal);
+  }
+
+  @media (max-width: 900px) {
+    flex-direction: column;
+    gap: var(--spacing-lg);
+    padding: var(--spacing-lg) var(--spacing-md);
   }
 }

@@ -1,9 +1,17 @@
+// Ink-navy rather than black; the accent is a soft violet so the dot field stays the signature.
 :root[data-theme='dark'] {
-  --color-bg: #16181d;
-  --color-surface: #1e2127;
-  --color-text: #e8e8e8;
-  --color-text-muted: #9a9a9a;
-  --color-border: #2c2f36;
-  --color-accent: #6b9bf0;
-  --color-danger: #e0665f;
+  --color-bg: #0c1020;
+  --color-surface: #141a2e;
+  --color-surface-sunken: #090c18;
+  --color-text: #e6e9f5;
+  --color-text-muted: #8f98b3;
+  --color-border: #232a44;
+  --color-border-strong: #343d5e;
+  --color-accent: #8e8cff;
+  --color-accent-soft: #232350;
+  --color-signal: #f7b84b;
+  --color-danger: #f0707f;
+  --color-dot: rgb(230 233 245 / 9%);
+  --shadow-raised: 0 1px 2px rgb(0 0 0 / 30%), 0 8px 24px rgb(0 0 0 / 30%);
+  --shadow-overlay: 0 16px 48px rgb(0 0 0 / 55%);
 }

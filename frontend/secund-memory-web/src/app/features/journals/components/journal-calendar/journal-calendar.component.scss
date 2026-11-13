@@ -1,8 +1,17 @@
 .journal-calendar li {
   padding: var(--spacing-xs) 0;
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.journal-calendar li a:hover {
+  color: var(--color-accent);
 }
 
 .journal-calendar__item--active a {
   color: var(--color-accent);
-  font-weight: 600;
+  font-weight: 500;
+  padding-left: var(--spacing-sm);
+  border-left: 2px solid var(--color-signal);
 }

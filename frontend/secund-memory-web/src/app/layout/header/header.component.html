@@ -1,11 +1,16 @@
 <header class="header">
-  <span class="header__brand">Secund Memory</span>
-
-  <button class="header__search" (click)="palette.open()">Search… (Ctrl+K)</button>
+  <button class="header__search" (click)="palette.open()">
+    <svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true">
+      <circle cx="9" cy="9" r="5.5" fill="none" stroke="currentColor" stroke-width="1.6" />
+      <path d="m13.5 13.5 3.5 3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+    </svg>
+    <span class="header__search-label">Search or jump to a page</span>
+    <kbd class="header__kbd">Ctrl K</kbd>
+  </button>
 
   <div class="header__actions">
     <app-button variant="ghost" (clicked)="theme.toggle()">
-      {{ theme.theme() === 'light' ? '🌙' : '☀️' }}
+      {{ theme.theme() === 'light' ? 'Dark' : 'Light' }}
     </app-button>
     <app-button variant="ghost" (clicked)="logout()">Log out</app-button>
   </div>

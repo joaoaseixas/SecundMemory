@@ -1,7 +1,8 @@
 .modal-backdrop {
   position: fixed;
   inset: 0;
-  background: rgb(0 0 0 / 40%);
+  background: rgb(8 10 22 / 50%);
+  backdrop-filter: blur(3px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -9,26 +10,31 @@
 }
 
 .modal-panel {
-  background: var(--color-bg);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
+  box-shadow: var(--shadow-overlay);
   min-width: 320px;
-  max-width: min(90vw, 480px);
+  max-width: min(92vw, 480px);
 
   &__header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: var(--spacing-md);
+    padding: var(--spacing-md) var(--spacing-lg);
     border-bottom: 1px solid var(--color-border);
+    font-family: var(--font-display);
+    font-weight: 600;
   }
 
   &__close {
     background: none;
     border: none;
     font-size: var(--font-size-lg);
+    color: var(--color-text-muted);
   }
 
   &__body {
-    padding: var(--spacing-md);
+    padding: var(--spacing-lg);
   }
 }

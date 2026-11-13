@@ -1,10 +1,19 @@
 .graph-canvas__note {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-xs);
   color: var(--color-text-muted);
   margin-bottom: var(--spacing-md);
 }
 
+// The graph sits on the same dot field as the rest of the app, framed as a sheet.
 .graph-canvas__stage {
   width: 100%;
+  background-color: var(--color-surface);
+  background-image: radial-gradient(var(--color-dot) 1.2px, transparent 1.2px);
+  background-size: var(--dot-size) var(--dot-size);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
 }
 
 .graph-canvas__canvas {

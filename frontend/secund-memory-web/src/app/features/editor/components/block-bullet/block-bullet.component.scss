@@ -1,18 +1,32 @@
+// A bullet is a node: a small dot with a soft halo. Parents with children get a ring;
+// collapsed ones fill with the accent so hidden structure is visible at a glance.
 .bullet {
   display: inline-block;
-  width: 6px;
-  height: 6px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
   background: var(--color-text-muted);
-  margin-right: var(--spacing-sm);
+  margin: 0.55rem var(--spacing-sm) 0 0;
   flex-shrink: 0;
+  transition:
+    background var(--duration-fast) var(--ease-out),
+    box-shadow var(--duration-fast) var(--ease-out);
+
+  &:hover {
+    background: var(--color-accent);
+  }
 
   &--parent {
     cursor: pointer;
-    box-shadow: 0 0 0 3px var(--color-surface);
+    box-shadow: 0 0 0 3px var(--color-border);
+
+    &:hover {
+      box-shadow: 0 0 0 3px var(--color-accent-soft);
+    }
   }
 
   &--collapsed {
     background: var(--color-accent);
+    box-shadow: 0 0 0 3px var(--color-accent-soft);
   }
 }
