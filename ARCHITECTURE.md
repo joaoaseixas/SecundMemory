@@ -10,77 +10,94 @@ them.
 > circle can know anything about an outer circle.
 
 ```
-                    ┌─────────────────────────────────────────────┐
-                    │  Frameworks & Drivers                        │
-                    │  SecundMemory.Api                            │
-                    │  ASP.NET Core · controllers · MCP endpoint   │
-                    │  ┌───────────────────────────────────────┐  │
-                    │  │  Interface Adapters                   │  │
-                    │  │  SecundMemory.Infrastructure           │  │
-                    │  │  EF Core · Npgsql · ApplicationDbContext│  │
-                    │  │  ┌─────────────────────────────────┐  │  │
-                    │  │  │  Use Cases                        │  │  │
-                    │  │  │  SecundMemory.Application          │  │  │
-                    │  │  │  NoteService · ProfileFactService  │  │  │
-                    │  │  │  CapacityService                   │  │  │
-                    │  │  │  ┌───────────────────────────┐    │  │  │
-                    │  │  │  │  Entities                  │    │  │  │
-                    │  │  │  │  SecundMemory.Domain         │    │  │  │
-                    │  │  │  │  Note · Tag · ProfileFact   │    │  │  │
-                    │  │  │  └───────────────────────────┘    │  │  │
-                    │  │  └─────────────────────────────────┘  │  │
-                    │  └───────────────────────────────────────┘  │
-                    └─────────────────────────────────────────────┘
-              dependencies point inward  →  Api → Infrastructure → Application → Domain
+              Api  →  Infrastructure  →  Application  →  Domain
 ```
 
-| Book's term            | Project                       | Contains                                                              | Depends on |
-|-------------------------|--------------------------------|-------------------------------------------------------------------------|------------|
-| Entities                | `SecundMemory.Domain`          | `Note`, `Tag`, `ProfileFact` — plain C# classes, no package references   | nothing |
-| Use Cases               | `SecundMemory.Application`     | `NoteService`, `ProfileFactService`, `CapacityService`, and the `IApplicationDbContext` port they're coded against | Domain only |
-| Interface Adapters      | `SecundMemory.Infrastructure`  | `ApplicationDbContext` (EF Core), Npgsql wiring, migrations              | Application, Domain |
-| Frameworks & Drivers    | `SecundMemory.Api`             | ASP.NET Core composition root, controllers, the MCP server endpoint     | Application, Infrastructure |
+| Layer                | Project                       | Contains | Depends on |
+|----------------------|-------------------------------|----------|------------|
+| Entities             | `SecundMemory.Domain`         | Aggregates and value objects: `Page`, `Block`, `Tag`, `Journal`, `Attachment`, `User`, `Workspace`; link parsing (`LinkParser`, `BlockReference`); domain events; `Result`, `ValueObject`, soft-delete/audit base types. No package references. | nothing |
+| Use Cases            | `SecundMemory.Application`    | Commands/queries and their handlers (feature folders), validators, DTOs, pipeline behaviors, and the ports (`IApplicationDbContext`, `ISearchService`, `IFileStorage`, `IJwtTokenService`, `ICacheService`, ...). | Domain |
+| Interface Adapters   | `SecundMemory.Infrastructure` | EF Core + Npgsql `ApplicationDbContext` and migrations, Postgres full-text search, JWT/password hashing, file storage (local and S3), memory cache, background jobs. | Application, Domain |
+| Frameworks & Drivers | `SecundMemory.Api`            | ASP.NET Core composition root: controllers, exception/logging middleware, SignalR hub, MCP server, Swagger, optional SPA hosting. | Application, Infrastructure |
 
-The critical consequence: **`SecundMemory.Application` has no reference to EF
-Core's Npgsql provider, ASP.NET Core, or anything else framework-specific.**
-It depends only on the `IApplicationDbContext` interface it declares itself
-(`Application/Common/Interfaces/IApplicationDbContext.cs`). `Infrastructure`
-is the only project that knows Postgres exists.
+`Application` never references EF Core's Npgsql provider, ASP.NET Core or any other
+framework: it only knows the ports it declares itself. `Infrastructure` is the only
+project that knows Postgres exists. These rules are enforced by
+`SecundMemory.ArchitectureTests`.
 
-## Why this matters here specifically
+## Application layer: CQRS without a library
 
-Because `Application` doesn't depend on `Infrastructure`, the use cases can be
-tested with a fake in-memory `IApplicationDbContext` and never need your real
-cloud Postgres instance to be reachable — see `tests/SecundMemory.Application.UnitTests`.
-If you ever swap Postgres for something else, only `Infrastructure` changes;
-`Domain`, `Application`, and the controllers in `Api` do not.
+Use cases are organised by feature (`Features/Pages`, `Blocks`, `Journals`, `Tags`,
+`Graph`, `Search`, `Attachments`, `Auth`, `ImportExport`), each split into
+`Commands/` and `Queries/`. A small in-house `IDispatcher` (see
+[ADR 0002](docs/adr/0002-custom-cqrs-mediator.md)) resolves the handler and wraps it
+in a pipeline of behaviors, outermost first:
+
+```
+Logging → Authorization → Validation → Performance → Transaction → Handler
+```
+
+Domain events raised by aggregates are dispatched after the transaction's changes
+are saved (`IDomainEventDispatcher`). Examples: indexing `[[links]]` and `#tags`
+when block content changes, and rewriting references when a page is renamed.
+
+Objects are mapped by hand rather than with AutoMapper
+([ADR 0003](docs/adr/0003-custom-mapping-over-automapper.md)).
+
+## Data and multi-tenancy
+
+Everything belongs to a `Workspace`; the workspace id is carried in the JWT and read
+through `ICurrentUser`. Entities are auditable and soft-deleted; a background job
+(`CleanupSoftDeletedJob`) purges old deleted rows, and `ReindexSearchJob` rebuilds
+the search index. Tags are their own entity, not unified with pages
+([ADR 0001](docs/adr/0001-tag-as-separate-entity.md)).
+
+Your data lives in a Postgres database you own. The connection string is supplied via
+user-secrets or the `ConnectionStrings__SecondBrain` environment variable, never a
+file in this repo.
+
+## Api layer
+
+- Controllers are thin: they send a command/query through the dispatcher.
+- `ExceptionHandlingMiddleware` maps `ValidationException`, `NotFoundException`,
+  `ForbiddenException` and `UnauthorizedAccessException` to HTTP responses.
+- `SyncHub` (`/hubs/sync`) pushes realtime updates between clients.
+- `/mcp` exposes MCP tools (`SecondBrainTools`) so AI assistants can search the vault,
+  fetch backlinks and open today's journal.
+- When `Spa:Root` (or `./wwwroot`) contains a built `index.html`, the API serves the
+  Angular app too, so the whole product runs as one process (`run.ps1`).
+
+## Frontend
+
+`frontend/secund-memory-web` is a standalone-component Angular app: `core/`
+(API services, auth, config), `shared/` (reusable UI), `layout/` (main and auth
+layouts) and lazy-loaded `features/` — `editor`, `pages`, `journals`, `tags`,
+`graph` (force-directed, on canvas), `search`, `attachments`, `import-export`,
+`settings`, `auth`. The block editor is a custom textarea-based editor
+([ADR 0005](docs/adr/0005-custom-textarea-editor-over-tiptap.md)).
 
 ## Tests mirror the layers
 
 ```
-tests/
-├── SecundMemory.Domain.UnitTests/           # Entities in isolation, zero dependencies
-├── SecundMemory.Application.UnitTests/      # Use cases against a fake IApplicationDbContext (EF Core InMemory)
-└── SecundMemory.Infrastructure.IntegrationTests/  # Real ApplicationDbContext mapping against a relational engine (SQLite), no live Postgres required
+backend/tests/
+├── SecundMemory.Domain.UnitTests/                 # Entities in isolation
+├── SecundMemory.Application.UnitTests/            # Handlers against a fake IApplicationDbContext
+├── SecundMemory.Infrastructure.IntegrationTests/  # Real DbContext mapping on SQLite, no live Postgres
+├── SecundMemory.Api.IntegrationTests/             # HTTP pipeline end to end
+└── SecundMemory.ArchitectureTests/                # Dependency rule and handler naming conventions
 ```
 
-Run them all from `backend/`:
-
-```
-dotnet test
-```
+Run them all from `backend/` with `dotnet test`.
 
 ## Solution layout
 
-`backend/SecundMemory.slnx` groups the seven projects by layer so this is
-visible in any IDE, not just on disk:
+`backend/SecundMemory.slnx` groups the nine projects by layer:
 
 ```
-/src/Core/            Domain, Application     (the two layers with zero outward dependencies)
+/src/Core/            Domain, Application
 /src/Infrastructure/  Infrastructure
 /src/Presentation/    Api
-/tests/               the three test projects above
+/tests/               the five test projects above
 ```
 
-See the root `README.md` for how the frontend (`frontend/secund-memory-web`)
-is organized and how the two sides talk to each other.
+See the root [`README.md`](./README.md) for setup and running instructions.
