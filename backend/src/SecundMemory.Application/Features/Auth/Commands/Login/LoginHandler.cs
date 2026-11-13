@@ -20,6 +20,7 @@ public class LoginHandler(
             throw new UnauthorizedAccessException("Invalid email or password.");
 
         var workspace = await db.Workspaces
+            .Include(w => w.Members)
             .FirstOrDefaultAsync(w => w.Members.Any(m => m.UserId == user.Id), cancellationToken);
 
         if (workspace is null)

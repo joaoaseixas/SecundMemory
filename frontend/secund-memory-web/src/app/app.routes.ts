@@ -6,11 +6,6 @@ import { MainLayoutComponent } from './layout/main-layout/main-layout.component'
 export const routes: Routes = [
   {
     path: '',
-    component: AuthLayoutComponent,
-    children: [{ path: '', loadChildren: () => import('./features/auth/auth.routes').then((m) => m.authRoutes) }],
-  },
-  {
-    path: '',
     component: MainLayoutComponent,
     canActivate: [authGuard],
     children: [
@@ -24,5 +19,13 @@ export const routes: Routes = [
       { path: 'import-export', loadChildren: () => import('./features/import-export/import-export.routes').then((m) => m.importExportRoutes) },
       { path: 'settings', loadChildren: () => import('./features/settings/settings.routes').then((m) => m.settingsRoutes) },
     ],
+  },
+  // Must come after the main layout: at "/" an empty-path auth layout would
+  // match with zero children and render a blank card instead of letting
+  // authGuard redirect to /login.
+  {
+    path: '',
+    component: AuthLayoutComponent,
+    children: [{ path: '', loadChildren: () => import('./features/auth/auth.routes').then((m) => m.authRoutes) }],
   },
 ];
