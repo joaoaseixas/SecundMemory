@@ -91,6 +91,29 @@ cd frontend/secund-memory-web && npm install && npm start   # UI on :4200, proxi
 
 **Tests:** `cd backend && dotnet test`
 
+## Deploying to the cloud (phone + PC)
+
+The repo ships a `Dockerfile` (builds the Angular app and the API into one image) and a
+`render.yaml` blueprint. The app is a PWA, so once it's online you can install it from
+the browser on your phone ("Add to Home screen") and on your PC ("Install app").
+
+1. **Database:** create a free Postgres on [Neon](https://neon.tech) and copy its
+   connection string (`postgresql://...` URLs are accepted as-is).
+2. **Web service:** on [Render](https://render.com), create a new *Blueprint* from this
+   repo. When asked, paste the connection string as `ConnectionStrings__SecondBrain`.
+   `Jwt__Secret` and `Mcp__ApiKey` are generated for you. Migrations run on startup.
+3. **Open the URL**, register your account, then set `Auth__AllowRegistration=false` in
+   Render so nobody else can sign up.
+
+Free Render services sleep when idle, so the first request after a while takes ~30 s.
+
+| Setting | Purpose |
+|---|---|
+| `ConnectionStrings__SecondBrain` | Postgres you own |
+| `Jwt__Secret` | signs login tokens (32+ chars) |
+| `Auth__AllowRegistration` | `false` blocks new accounts (default `true`) |
+| `Mcp__ApiKey` | required to call `/mcp`; without it `/mcp` is 404 outside Development |
+
 ## API overview
 
 All endpoints except `auth/*` require `Authorization: Bearer <token>`. Swagger is
@@ -110,7 +133,8 @@ available in Development.
 ## Connecting an AI assistant via MCP
 
 With the API running, point any MCP-compatible client (Claude Code, Claude Desktop,
-etc.) at `http://localhost:5005/mcp` (streamable HTTP). Tools exposed:
+etc.) at `http://localhost:5005/mcp` (streamable HTTP). When deployed, send
+`Authorization: Bearer <Mcp__ApiKey>`. Tools exposed:
 
 - `search_second_brain` — free-text search in a workspace
 - `get_page_backlinks` — pages that link to a given page

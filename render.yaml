@@ -1,0 +1,16 @@
+# Render Blueprint: one Docker web service. The database lives in Neon (or any Postgres you own).
+services:
+  - type: web
+    name: secund-memory
+    runtime: docker
+    plan: free
+    healthCheckPath: /health
+    envVars:
+      - key: ConnectionStrings__SecondBrain
+        sync: false   # paste your Neon connection string in the Render dashboard
+      - key: Jwt__Secret
+        generateValue: true
+      - key: Mcp__ApiKey
+        generateValue: true
+      - key: Auth__AllowRegistration
+        value: "true"  # flip to "false" after you've created your account

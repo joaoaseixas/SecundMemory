@@ -21,7 +21,17 @@ builder.Services.AddMcpServer()
     .WithHttpTransport()
     .WithToolsFromAssembly();
 
+builder.Services.Configure<Microsoft.AspNetCore.Builder.ForwardedHeadersOptions>(o =>
+{
+    o.ForwardedHeaders = Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedFor |
+                         Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedProto;
+    o.KnownNetworks.Clear();
+    o.KnownProxies.Clear();
+});
+
 var app = builder.Build();
+
+app.UseForwardedHeaders();
 
 app.UseApiDocumentation();
 
@@ -37,6 +47,7 @@ using (var scope = app.Services.CreateScope())
     await DbInitializer.SeedAsync(db);
 }
 
+app.UseMiddleware<McpApiKeyMiddleware>();
 app.UseMiddleware<RequestLoggingMiddleware>();
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
