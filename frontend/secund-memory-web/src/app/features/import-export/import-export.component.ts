@@ -6,6 +6,6 @@ import { EmptyStateComponent } from '../../shared/ui/empty-state/empty-state.com
   selector: 'app-import-export',
   standalone: true,
   imports: [EmptyStateComponent],
-  template: `<app-empty-state title="Import/Export coming in Fase 1.7" description="Markdown import and export aren't built yet." />`,
+  template: `<app-empty-state title="Import and export aren't available yet" description="Markdown import and export will appear here." />`,
 })
 export class ImportExportComponent {}

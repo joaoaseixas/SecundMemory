@@ -57,5 +57,13 @@
     flex-direction: column;
     gap: var(--spacing-lg);
     padding: var(--spacing-lg) var(--spacing-md);
+
+    &__sidebar {
+      min-width: 0;
+    }
+
+    &__header h1 {
+      font-size: var(--font-size-lg);
+    }
   }
 }

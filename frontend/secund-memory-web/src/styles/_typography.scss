@@ -17,3 +17,28 @@ h3 {
   letter-spacing: -0.02em;
   line-height: 1.15;
 }
+
+h1 {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+}
+
+h2 {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+}
+
+// One page frame for every top-level screen so headings and content line up.
+.page {
+  max-width: var(--content-width);
+  margin: 0 auto;
+  padding: var(--spacing-xl) var(--spacing-lg);
+
+  > h1 {
+    margin-bottom: var(--spacing-lg);
+  }
+
+  @media (max-width: 760px) {
+    padding: var(--spacing-lg) var(--spacing-md);
+  }
+}

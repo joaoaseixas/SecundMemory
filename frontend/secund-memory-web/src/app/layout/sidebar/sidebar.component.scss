@@ -97,6 +97,15 @@
       order: 3;
       overflow-x: auto;
       padding: 0 var(--spacing-md) var(--spacing-sm);
+      scrollbar-width: none;
+
+      a {
+        white-space: nowrap;
+      }
+    }
+
+    &__brand {
+      padding: 0 var(--spacing-md);
     }
 
     &__lists,

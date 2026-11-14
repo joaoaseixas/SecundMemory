@@ -1,0 +1,19 @@
+{
+  "name": "Secund Memory",
+  "short_name": "Secund",
+  "description": "Your second brain, your own database.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f2f4f8",
+  "theme_color": "#4338f0",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Today's journal", "url": "/journal" },
+    { "name": "Search", "url": "/search" }
+  ]
+}

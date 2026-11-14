@@ -52,8 +52,19 @@
   @media (max-width: 760px) {
     padding: 0 var(--spacing-md);
 
+    gap: var(--spacing-sm);
+
     &__kbd {
       display: none;
+    }
+
+    &__search {
+      min-width: 0;
+    }
+
+    &__actions {
+      flex-shrink: 0;
+      white-space: nowrap;
     }
   }
 }

@@ -25,6 +25,7 @@
 
     &__body {
       overflow-y: visible;
+      padding-bottom: env(safe-area-inset-bottom);
     }
   }
 }

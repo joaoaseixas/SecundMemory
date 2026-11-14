@@ -67,3 +67,33 @@ ol {
     transition-duration: 0.01ms !important;
   }
 }
+
+// Native controls that no component styles itself (filters, checkboxes) still follow the theme.
+input:not([type='checkbox']):not([type='radio']),
+textarea,
+select {
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-text);
+
+  &:focus {
+    outline: none;
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px var(--color-accent-soft);
+  }
+
+  &::placeholder {
+    color: var(--color-text-muted);
+  }
+}
+
+input[type='checkbox'],
+input[type='radio'] {
+  accent-color: var(--color-accent);
+}
+
+button {
+  touch-action: manipulation;
+}

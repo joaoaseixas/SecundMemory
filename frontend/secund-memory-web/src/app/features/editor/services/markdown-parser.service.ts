@@ -22,6 +22,13 @@ export class MarkdownParserService {
     const withBold = withEmbeds.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
     const withItalic = withBold.replace(/\*([^*]+)\*/g, '<em>$1</em>');
 
-    return this.sanitizer.bypassSecurityTrustHtml(withItalic);
+    const withTags = withItalic
+      .split(/(<[^>]+>)/)
+      .map((part) =>
+        part.startsWith('<') ? part : part.replace(/(^|\s)#([\p{L}\d_-]+)/gu, '$1<span class="inline-tag">#$2</span>'),
+      )
+      .join('');
+
+    return this.sanitizer.bypassSecurityTrustHtml(withTags);
   }
 }
